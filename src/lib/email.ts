@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 
 export function normalizeEmail(input: string): string {
   const trimmed = input.trim().toLowerCase();
-  if (!trimmed || !trimmed.includes('@')) {
+  if (!trimmed?.includes('@')) {
     throw new Error('Invalid email');
   }
   return trimmed;

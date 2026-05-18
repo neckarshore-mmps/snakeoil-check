@@ -12,7 +12,9 @@
       "!drizzle",
       "!playwright-report",
       "!test-results",
-      "!**/*.tsbuildinfo"
+      "!**/*.tsbuildinfo",
+      "!tsconfig.json",
+      "!tsconfig.tsbuildinfo"
     ]
   },
   "formatter": {

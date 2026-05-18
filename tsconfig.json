@@ -41,6 +41,7 @@
   "exclude": [
     "node_modules",
     "playwright-tests",
-    "test-results"
+    "test-results",
+    ".next/dev"
   ]
 }
