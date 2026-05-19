@@ -12,6 +12,7 @@
       "!drizzle",
       "!playwright-report",
       "!test-results",
+      "!**/__fixtures__",
       "!**/*.tsbuildinfo",
       "!tsconfig.json",
       "!tsconfig.tsbuildinfo"
