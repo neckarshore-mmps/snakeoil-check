@@ -1,8 +1,12 @@
-# Phase 3 — Free-Shot Funnel (STUB)
+# Phase 3 — Free-Shot Funnel (SUPERSEDED 2026-05-20)
 
-> **STATUS:** Stub — to be filled after Phase 2 ships.
+> **STATUS:** ❌ **SUPERSEDED BY [Phase-2-B1 Free-Shot Funnel](./2026-05-20-phase-2-b1-free-shot-funnel.md)** (2026-05-20 letter-e MASCHIN-session).
+>
+> This stub was written under the v0.1 pre-pivot pricing-model (Free-Shot + 3-Shot 19€ + 10-Shot 49€). The v0.2 Pricing-Pivot (2026-05-20 letter-b, [Design-Doc v0.2 § 4](../specs/2026-05-20-tiered-architecture-design.md)) changed Free-Shot semantics from "1 per email_hash / 30 days" to "1 per confirmed email LIFETIME" plus added Email-Gating + 4-Layer Email-Verify + Wait-Page-Conversion-Trick + Curated Examples Gallery (Tier 0) + GDPR Double-Opt-In. The substantive scope of "Free-Shot Funnel" now lives in Phase-2-B1.
+>
+> **For implementation:** use [Phase-2-B1 Free-Shot Funnel](./2026-05-20-phase-2-b1-free-shot-funnel.md), not this file. This file preserved for historical traceability only.
 
-## Goal
+## Original Goal (v0.1 pre-pivot)
 
 User-facing Free-Shot flow: marketing landing → form (URL + email) → enqueue Workflow → "wird gebaut" page → email with report-link → web-report page. Abuse-limits and rate-limits in place.
 

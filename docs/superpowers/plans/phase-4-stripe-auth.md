@@ -1,8 +1,17 @@
-# Phase 4 — Stripe + Auth (STUB)
+# Phase 4 — Stripe + Auth (SUPERSEDED 2026-05-20)
 
-> **STATUS:** Stub — to be filled after Phase 3 ships.
+> **STATUS:** ❌ **SUPERSEDED BY [Phase-2-B2 Stripe Single-Shot stub](./2026-05-20-phase-2-b2-stripe-single-shot.md)** (2026-05-20 letter-e MASCHIN-session).
+>
+> This stub was written under the v0.1 pre-pivot pricing-model (3-Shot 19€ + 10-Shot 49€ bundles via Stripe Checkout-Session + Magic-Link Auth). The v0.2 Pricing-Pivot (2026-05-20 letter-b, [Design-Doc v0.2 § 4](../specs/2026-05-20-tiered-architecture-design.md)) changed:
+> - Bundle-pricing → Single-Shot Pay-Per-Use (€1 Standard + €3 Deep)
+> - Stripe Checkout-Session → Stripe Payment-Intent (lower fee + embedded UX)
+> - Magic-Link Auth in MVP → **NO auth in MVP** (anonymous purchase, Auth moves to Phase 3 with Subscription tier)
+>
+> User-account flow (Magic-Link Auth, Subscription tier €10/Monat) defers to **Phase 3 per [Design-Doc v0.2 § 14.2](../specs/2026-05-20-tiered-architecture-design.md)**.
+>
+> **For implementation:** use [Phase-2-B2 Stripe Single-Shot](./2026-05-20-phase-2-b2-stripe-single-shot.md), not this file. This file preserved for historical traceability only.
 
-## Goal
+## Original Goal (v0.1 pre-pivot)
 
 Paid users can purchase 3-Shot (19 €) or 10-Shot (49 €) via Stripe Checkout, get an email magic-link, log in to a dashboard, and have shot-balance ready to redeem.
 
