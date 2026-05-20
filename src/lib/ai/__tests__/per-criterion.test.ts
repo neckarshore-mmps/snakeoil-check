@@ -31,6 +31,10 @@ vi.mock('@ai-sdk/anthropic', () => ({
   anthropic: vi.fn(() => 'stub-model'),
 }));
 
+vi.mock('@ai-sdk/google', () => ({
+  google: vi.fn(() => 'stub-google-model'),
+}));
+
 import type { NormalizedDoc } from '../../scraping/normalize';
 import { scorePerCriterion } from '../strategies/per-criterion';
 

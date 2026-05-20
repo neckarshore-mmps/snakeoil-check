@@ -13,10 +13,11 @@
 
 import { generateObject } from 'ai';
 import type { z } from 'zod';
+import type { RouteDecision } from '../../router/types';
 import { FullCheckSchema } from '../../scoring/schema';
 import type { CriterionScore } from '../../scoring/types';
 import type { NormalizedDoc } from '../../scraping/normalize';
-import { MODEL_LABEL, MODEL_TEMPERATURE, scorerModel } from '../gateway';
+import { createModelHandle, MODEL_LABEL, MODEL_TEMPERATURE, scorerModel } from '../gateway';
 import { buildFullPrompt } from '../prompts';
 
 // Zod 4 vs ai-SDK 4 type-inference: the SDK's peerDep is "zod": "^3.23.8"
@@ -33,11 +34,28 @@ export interface StrategyResult {
   outputTokens: number;
 }
 
-export async function scoreSingleCall(doc: NormalizedDoc): Promise<StrategyResult> {
+/**
+ * Single-call scoring strategy.
+ *
+ * Phase-2-A: accepts optional routeDecision for Router-Layer model selection.
+ * When routeDecision is provided, uses createModelHandle() for the specified
+ * provider/model. Without it, falls back to legacy scorerModel (Sonnet 4.5).
+ */
+export async function scoreSingleCall(
+  doc: NormalizedDoc,
+  routeDecision?: RouteDecision,
+): Promise<StrategyResult> {
+  const model = routeDecision
+    ? createModelHandle({ provider: routeDecision.provider, model_id: routeDecision.model_id })
+    : scorerModel;
+  const modelLabel = routeDecision
+    ? `${routeDecision.provider}/${routeDecision.model_id}`
+    : MODEL_LABEL;
+
   const { system, user } = buildFullPrompt(doc);
   const start = Date.now();
   const result = await generateObject({
-    model: scorerModel,
+    model,
     system,
     prompt: user,
     schema: FullCheckSchema,
@@ -53,7 +71,7 @@ export async function scoreSingleCall(doc: NormalizedDoc): Promise<StrategyResul
   }));
   return {
     scores,
-    model: MODEL_LABEL,
+    model: modelLabel,
     latencyMs,
     inputTokens: result.usage?.promptTokens ?? 0,
     outputTokens: result.usage?.completionTokens ?? 0,

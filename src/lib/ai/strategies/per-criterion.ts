@@ -13,11 +13,12 @@
 
 import { generateObject } from 'ai';
 import { z } from 'zod';
+import type { RouteDecision } from '../../router/types';
 import { CRITERIA } from '../../scoring/criteria';
 import { CriterionScoreSchema } from '../../scoring/schema';
 import type { CriterionScore } from '../../scoring/types';
 import type { NormalizedDoc } from '../../scraping/normalize';
-import { MODEL_LABEL, MODEL_TEMPERATURE, scorerModel } from '../gateway';
+import { createModelHandle, MODEL_LABEL, MODEL_TEMPERATURE, scorerModel } from '../gateway';
 import { buildSingleCriterionPrompt } from '../prompts';
 import type { StrategyResult } from './single-call';
 
@@ -28,7 +29,23 @@ const SingleCriterionResponse = z.object({
 // Zod 4 vs ai-SDK 4 type-inference: see strategies/single-call.ts for context.
 type SingleCriterionResult = z.infer<typeof SingleCriterionResponse>;
 
-export async function scorePerCriterion(doc: NormalizedDoc): Promise<StrategyResult> {
+/**
+ * Per-criterion scoring strategy.
+ *
+ * Phase-2-A: accepts optional routeDecision for Router-Layer model selection.
+ * When provided, uses createModelHandle() for the specified provider/model.
+ */
+export async function scorePerCriterion(
+  doc: NormalizedDoc,
+  routeDecision?: RouteDecision,
+): Promise<StrategyResult> {
+  const model = routeDecision
+    ? createModelHandle({ provider: routeDecision.provider, model_id: routeDecision.model_id })
+    : scorerModel;
+  const modelLabel = routeDecision
+    ? `${routeDecision.provider}/${routeDecision.model_id}`
+    : MODEL_LABEL;
+
   const start = Date.now();
   let inputTokens = 0;
   let outputTokens = 0;
@@ -37,7 +54,7 @@ export async function scorePerCriterion(doc: NormalizedDoc): Promise<StrategyRes
     CRITERIA.map(async (c) => {
       const { system, user } = buildSingleCriterionPrompt(doc, c.id);
       const r = await generateObject({
-        model: scorerModel,
+        model,
         system,
         prompt: user,
         schema: SingleCriterionResponse,
@@ -64,7 +81,7 @@ export async function scorePerCriterion(doc: NormalizedDoc): Promise<StrategyRes
   const scores = results.sort((a, b) => a.criterionId - b.criterionId);
   return {
     scores,
-    model: MODEL_LABEL,
+    model: modelLabel,
     latencyMs: Date.now() - start,
     inputTokens,
     outputTokens,
