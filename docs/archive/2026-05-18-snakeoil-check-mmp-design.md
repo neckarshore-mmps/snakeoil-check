@@ -1,7 +1,29 @@
-# Snake-Oil-or-Gold Check — MMP Design Spec
+# Snake-Oil-or-Gold Check — MMP Design Spec [ARCHIVED — SUPERSEDED]
+
+> **⚠️ SUPERSEDED 2026-05-20.** This spec is archived for historical reference. The Pricing-Model + Tier-Architecture have been pivoted in the brainstorm session of 2026-05-20 (letter-b). See the canonical replacement: [`docs/superpowers/specs/2026-05-20-tiered-architecture-design.md`](../superpowers/specs/2026-05-20-tiered-architecture-design.md).
+>
+> **Pivot-Punkte (2026-05-18 → 2026-05-20):**
+> 1. **Pricing-Model**: Shot-Bundles (€19 / €49) → ersetzt durch Pay-Per-Shot (€1 / €3) + Monthly Sub (€10) + BYOK
+> 2. **Flatrate-Sub**: explicitly excluded in v0.1 → central feature in v0.3 roadmap
+> 3. **Account-Mechanik**: Magic-Link Account ab erstem Stripe-Purchase → anonymous-only für Single-Shots, Account erst ab Sub-Tier
+> 4. **Free-Shot Mechanik**: 1/Email/30 Tage → 2/Tag/IP mit Email-Gating + Disposable-Detection + Bounce-Check
+> 5. **Tier-System**: 3 Tiers (Free + 3-Shot + 10-Shot) → 5+1 Tiers (Examples + Free-Shot + €1 + €3 + €10-Sub + €10-Sub+BYOK [+B2B Roadmap])
+> 6. **Modell-Strategie**: Single Anthropic Sonnet → Multi-Model (Gemini Flash für Free-Shot, Haiku für €1, Sonnet für €3, Opus only via BYOK)
+>
+> **Was aus 2026-05-18-Spec übernommen wurde:**
+> - Problem-Statement + Product-Vision (Sections 1-2)
+> - Scoring-Framework-Verweise (12 Kriterien, FREE_SHOT_INDICES bereits in Bob's `criteria.ts` implementiert)
+> - Defensible-Score-Anforderung (evidence-quote pro Kriterium)
+> - User-Trigger-Kontexte (Pre-Purchase, Ad-Confrontation)
+>
+> Inhalt unten ist Original-Spec von 2026-05-18 zur historischen Referenz, NICHT mehr als aktive Implementations-Grundlage zu lesen.
+
+---
+
+# Snake-Oil-or-Gold Check — MMP Design Spec (Original, 2026-05-18)
 
 **Date:** 2026-05-18
-**Status:** Draft v0.1 — pending user review
+**Status:** Draft v0.1 — SUPERSEDED 2026-05-20
 **Owner:** German Rauhut (MASCHIN-Planning)
 **Target Launch:** v0.1 in 6-8 Wochen (Full LOW)
 
