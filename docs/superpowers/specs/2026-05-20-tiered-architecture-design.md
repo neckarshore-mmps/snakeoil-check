@@ -727,10 +727,10 @@ Verify Stripe-Signature-Header against `STRIPE_WEBHOOK_SECRET` in Vercel-env. St
 | Variable | Dev (.env.local) | Preview | Production |
 |----------|------------------|---------|------------|
 | `ROUTER_TIER1_PROVIDER` | `google` | `anthropic` | `anthropic` |
-| `ROUTER_TIER1_MODEL` | `gemini-3-flash` | `claude-haiku-4.5` | `claude-haiku-4.5` |
+| `ROUTER_TIER1_MODEL` | `gemini-2.0-flash` | `claude-haiku-4-5` | `claude-haiku-4-5` |
 | `ROUTER_TIER2_PROVIDER` | `google` | `anthropic` | `anthropic` |
-| `ROUTER_TIER2_MODEL` | `gemini-3-flash` | `claude-sonnet-4.5` | `claude-sonnet-4.5` |
-| `ROUTER_FREESHOT_MODEL` | `gemini-3-flash` | `gemini-3-flash` | `gemini-3-flash` |
+| `ROUTER_TIER2_MODEL` | `gemini-2.0-flash` | `claude-sonnet-4-5` | `claude-sonnet-4-5` |
+| `ROUTER_FREESHOT_MODEL` | `gemini-2.0-flash` | `gemini-2.0-flash` | `gemini-2.0-flash` |
 | `FREE_SHOT_ENABLED` | `true` | `true` | `true` (kill-switch flippable) |
 | `FREE_SHOT_LIFETIME_LIMIT` | `99` (dev) | `1` | `1` |
 | `EMAIL_VERIFICATION_REQUIRED` | `false` (dev skip) | `true` | `true` |
