@@ -15,6 +15,14 @@ export interface RouteSignals {
  * Request context — who's asking and what tier they're on.
  */
 export interface RouteContext {
+  // PHASE-3 TIME BOMB (per Dr. Sommer F-NEW-2 2026-05-20-d):
+  // `sub-no-byok` and `sub-byok` are NOT in checkTierEnum (src/db/schema.ts).
+  // Safe today because SnakeOilCheckInput.tier is narrowed to free-shot|standard|deep.
+  // When Phase-3 introduces sub-tier in workflow input, this WILL cause Postgres
+  // enum violation in persistStep. Required action at Phase-3 launch:
+  //   (a) DB migration extending checkTierEnum to include sub-no-byok + sub-byok
+  //   (b) Simultaneously widen SnakeOilCheckInput.tier
+  //   (c) Optionally add runtime guard in persistStep validating input.tier against enum
   tier: 'free-shot' | 'standard' | 'deep' | 'sub-no-byok' | 'sub-byok';
   customer_id?: string;
   // Phase-3+ only — BYOK config from DB

@@ -24,6 +24,9 @@ export type NewUser = typeof users.$inferInsert;
 
 // ── Enums (Phase-2-A) ────────────────────────────────────────────────────────
 
+// PHASE-3 EXTENSION POINT (per Dr. Sommer F-NEW-2 2026-05-20-d):
+// When sub-tier launches, extend this enum with 'sub-no-byok' + 'sub-byok'
+// and create migration. See src/lib/router/types.ts RouteContext.tier comment.
 export const checkTierEnum = pgEnum('check_tier', ['free-shot', 'standard', 'deep', 'example']);
 
 export const stakeIndicatorEnum = pgEnum('stake_indicator', ['low', 'medium', 'high']);

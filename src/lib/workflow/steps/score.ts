@@ -41,6 +41,12 @@ export async function scoreStep(input: ScoreStepInput): Promise<ScoreStepOutput>
   const decision = makeRouteDecision(input.signals, { tier: input.tier });
 
   // Apply token budget to bodyText for truncation estimation
+  // SC5 policy decision 2026-05-20-d (User-pick A, cost-conservative):
+  // Budget-tier follows input.tier (purchase tier), NOT decision.model_tier (routing outcome).
+  // A standard customer escalated to Sonnet via signals KEEPS the standard 30K budget,
+  // not the deep 50K budget. Rationale: pre-revenue MMP, no escalation-frequency data,
+  // margin-protection over quality-parity. Revisit at N=10+ escalation datapoints.
+  // Reversal-cost: change this line + redeploy. No schema migration needed.
   const budgetTier =
     input.tier === 'deep' ? 'deep' : input.tier === 'free-shot' ? 'free-shot' : 'standard';
   const budgetResult = checkBudget(input.doc.bodyText, budgetTier);
