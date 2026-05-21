@@ -27,7 +27,7 @@ The Claude Code harness resets `cwd` after every Bash call. Unscoped commands ri
 | DB | Neon Postgres (Vercel Marketplace) |
 | ORM | Drizzle |
 | Auth | E-Mail Magic-Link (custom, no provider) |
-| Payments | Stripe Checkout Sessions + Webhooks |
+| Payments | Stripe Payment-Intent + Webhooks |
 | Email | Resend (Vercel Marketplace) |
 | AI | Vercel AI Gateway → `anthropic/claude-sonnet-4.5` |
 | Background Work | Vercel Workflow (DevKit) |

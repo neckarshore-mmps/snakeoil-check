@@ -11,7 +11,7 @@ Plans organized by phase. Each phase produces working, testable software on its 
 | 1 | Foundation — scaffold, deploy, DB, tests, CI | `2026-05-18-phase-1-foundation.md` | ✅ MERGED 2026-05-18 |
 | 2-A | Foundation — Router-Layer + Multi-Model gateway + DB-schema + Workflow + Benchmarks | `2026-05-20-phase-2-a-foundation.md` | ✅ MERGED 2026-05-20 (PR #16) |
 | 2-B1 | **Free-Shot Funnel** — Examples Gallery + Email-Verify-4-Layer + Anti-Abuse + Wait-Page-Conversion-Trick + GDPR Double-Opt-In + Result Page + Resend Audiences | `2026-05-20-phase-2-b1-free-shot-funnel.md` | ✅ written 2026-05-20 letter-e |
-| 2-B2 | **Stripe Single-Shot** — Payment-Intent + €1/€3 Checkout + Webhook + Refund | `2026-05-20-phase-2-b2-stripe-single-shot.md` | 🔲 stub (full Plan-Doc letter-f or later, post-B1-ship) |
+| 2-B2 | **Stripe Single-Shot** — Payment-Intent + €1/€3 Checkout + Webhook + Refund-on-Workflow-failure + Stripe Tax + Card-Testing-Rate-Limit | `2026-05-21-phase-2-b2-stripe-single-shot.md` | ✅ written 2026-05-21 letter-b (full Plan-Doc, supersedes 2026-05-20 stub) |
 | 2-C | Frontend + Acquisition (TBD per Design-Doc v0.2 § 14) | TBD | 🔲 not yet written |
 | 3 | Subscription Tier + BYOK + Magic-Link Auth + Dashboard + Newsletter Engine | (rename pending — old `phase-5-dashboard.md` + new file) | 🔲 stub |
 | 5 | (old "Dashboard + Paid Flows" — superseded by 2-B2 + 3) | `phase-5-dashboard.md` | 🔲 v0.1-stub, scope absorbed into 2-B2 + Phase 3 |
@@ -25,7 +25,8 @@ Plans organized by phase. Each phase produces working, testable software on its 
 |------|--------|---------------|--------|
 | `phase-2-ai-workflow.md` | ❌ Superseded | `2026-05-20-phase-2-a-foundation.md` | v0.2 Tiered Architecture re-scoped Phase-2 into A/B1/B2 split |
 | `phase-3-free-shot.md` | ❌ Superseded 2026-05-20 | `2026-05-20-phase-2-b1-free-shot-funnel.md` | v0.2 Pricing-Pivot: lifetime-limit + Email-Gating + GDPR Double-Opt-In + Wait-Page-Conversion-Trick added |
-| `phase-4-stripe-auth.md` | ❌ Superseded 2026-05-20 | `2026-05-20-phase-2-b2-stripe-single-shot.md` (stub) | v0.2 Pricing-Pivot: Single-Shot €1/€3 Payment-Intent (NOT 3/10-Shot Checkout-Session) + Auth deferred to Phase 3 |
+| `phase-4-stripe-auth.md` | ❌ Superseded 2026-05-20 | `2026-05-21-phase-2-b2-stripe-single-shot.md` (full Plan-Doc 2026-05-21) | v0.2 Pricing-Pivot: Single-Shot €1/€3 Payment-Intent (NOT 3/10-Shot Checkout-Session) + Auth deferred to Phase 3 |
+| `2026-05-20-phase-2-b2-stripe-single-shot.md` | ❌ Superseded 2026-05-21 | `2026-05-21-phase-2-b2-stripe-single-shot.md` (full Plan-Doc) | Stub was slot-reservation only (2026-05-20 letter-e); full Plan-Doc written 2026-05-21 letter-b after Stripe-preconditions filled + advisor()-pre-call integrated 11 catches |
 
 ## How To Use
 
