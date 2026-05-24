@@ -802,6 +802,27 @@ Snake-Oil-Check development produces natural artifacts (Plan-Docs, Session-Repor
 - 🔲 E2E Test Coverage (Bob's Task 9)
 - 🔲 CI Verification (Bob's Task 10)
 
+### 14.1.5 Phase-2-C — Pilot-Launch + Landing-Polish + Legal-Pages (bridge between B2-shipped and 5-pilot-users-in-production)
+
+Scope-defined 2026-05-24 letter-a per [Phase-2-C Scope-Clarification Spec 2026-05-21 Option B](2026-05-21-phase-2-c-scope-clarification.md). The work-block between "Phase-2-B2 ships" (MVP functionally complete) and "5 pilot users running real checks in production" (MVP publicly launched). Distinct from Phase-3 (post-launch feature-expansion). Absorbs launch-blocker scope from v0.1 stubs `phase-7-hardening.md` + `phase-8-pilot.md` (both archived to `docs/archive/` 2026-05-24).
+
+**To Build:**
+- 🔲 Landing-Copy revision post-v0.2-Pricing-Pivot (current copy may still reference Shot-Bundles; align to Single-Shot €1/€3 + future Subscription €10/Monat)
+- 🔲 Lighthouse 95+ across all v0.2 routes (`/`, `/free-shot`, `/wait/[token]`, `/result/[token]`, `/checkout/single-shot`, `/processing/[check_id]`, `/examples`, `/examples/[slug]`)
+- 🔲 Legal-Pages bundle (Imprint, Privacy, Terms) — launch-blocker for German market per BGB/TMG; folded from v0.1 `phase-7-hardening.md`
+- 🔲 5-pilot-user manual onboarding workflow (email recruitment + onboarding-script + feedback-capture form)
+- 🔲 Pricing-page if separate from landing (Decision-Needed pending — may fold into landing)
+- 🔲 GDPR delete-endpoint visible in MVP (launch-blocker for German market); folded from v0.1 `phase-7-hardening.md`
+- 🔲 Rate-limits visible in MVP (basic; already partly in B1 `rate_limits` table)
+- 🔲 Feedback-capture mechanism (single-form or email-thread; lightweight)
+
+**Decision-Needed at Phase-2-C Plan-Doc-write time** (defaults per [Spec 2026-05-21 § Decision-Needed](2026-05-21-phase-2-c-scope-clarification.md)): pilot-user-count = 5 / pilot-recruitment-channel = personal network + X-DM / Legal-Pages in Phase-2-C (not Phase-7) / Lighthouse-tuning as cross-cutting separate task.
+
+**Out-of-scope for Phase-2-C** (deferred to Phase-3+ or out-of-scope-explicitly per § 14.3 / § 14.4):
+- ❌ Monitoring expansion (basic monitoring already in B1+B2; advanced observability is Phase-3+)
+- ❌ Cloudflare Turnstile (already in B1 per Plan-Doc Phase 5)
+- ❌ Customer support tooling (out-of-scope per § 14.4 marketplace-out-of-scope reasoning)
+
 ### 14.2 Phase-3 (Post-MVP, 4-8 Wochen nach Launch)
 
 - 🔲 User Accounts (Magic-Link Auth, no password)
