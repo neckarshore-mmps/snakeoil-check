@@ -12,12 +12,10 @@ Plans organized by phase. Each phase produces working, testable software on its 
 | 2-A | Foundation — Router-Layer + Multi-Model gateway + DB-schema + Workflow + Benchmarks | `2026-05-20-phase-2-a-foundation.md` | ✅ MERGED 2026-05-20 (PR #16) |
 | 2-B1 | **Free-Shot Funnel** — Examples Gallery + Email-Verify-4-Layer + Anti-Abuse + Wait-Page-Conversion-Trick + GDPR Double-Opt-In + Result Page + Resend Audiences | `2026-05-20-phase-2-b1-free-shot-funnel.md` | ✅ written 2026-05-20 letter-e |
 | 2-B2 | **Stripe Single-Shot** — Payment-Intent + €1/€3 Checkout + Webhook + Refund-on-Workflow-failure + Stripe Tax + Card-Testing-Rate-Limit | `2026-05-21-phase-2-b2-stripe-single-shot.md` | ✅ written 2026-05-21 letter-b (full Plan-Doc, supersedes 2026-05-20 stub) |
-| 2-C | Frontend + Acquisition (TBD per Design-Doc v0.2 § 14) | TBD | 🔲 not yet written |
+| 2-C | **Pilot-Launch + Landing-Polish + Legal-Pages + Lighthouse-Tuning** — bridge between B2-shipped and 5-pilot-users-in-production. Scope: Lighthouse 95+ across v0.2 routes + Landing-Copy revision post-v0.2-Pricing-Pivot + 5-pilot-user manual onboarding workflow + Legal-Pages bundle (Imprint/Privacy/Terms) + Feedback-Capture mechanism. Absorbs launch-blocker scope from v0.1 `phase-7-hardening.md` + `phase-8-pilot.md` (both archived). | TBD (Plan-Doc next MASCHIN-session) | 🔲 scope-defined 2026-05-24 a per [Spec 2026-05-21 Option B](../specs/2026-05-21-phase-2-c-scope-clarification.md), Plan-Doc not yet written |
 | 3 | Subscription Tier + BYOK + Magic-Link Auth + Dashboard + Newsletter Engine | (rename pending — old `phase-5-dashboard.md` + new file) | 🔲 stub |
 | 5 | (old "Dashboard + Paid Flows" — superseded by 2-B2 + 3) | `phase-5-dashboard.md` | 🔲 v0.1-stub, scope absorbed into 2-B2 + Phase 3 |
 | 6 | Scoring Calibration — eval set, calibration runs, weight adjustments | `phase-6-calibration.md` | 🔲 stub |
-| 7 | Legal + Hardening — Imprint/Privacy/Terms, Cloudflare Turnstile (done in 2-B1), rate-limits, monitoring, GDPR delete-endpoint | `phase-7-hardening.md` | 🔲 scope-expanded 2026-05-20-d (Dr. Sommer findings + 3 NEW items #13+#14+#15) |
-| 8 | Pilot + Polish — 5 pilot users, feedback iteration, copy, Lighthouse | `phase-8-pilot.md` | 🔲 stub |
 
 ## Superseded Plans (preserved for traceability)
 
@@ -27,6 +25,8 @@ Plans organized by phase. Each phase produces working, testable software on its 
 | `phase-3-free-shot.md` | ❌ Superseded 2026-05-20 | `2026-05-20-phase-2-b1-free-shot-funnel.md` | v0.2 Pricing-Pivot: lifetime-limit + Email-Gating + GDPR Double-Opt-In + Wait-Page-Conversion-Trick added |
 | `phase-4-stripe-auth.md` | ❌ Superseded 2026-05-20 | `2026-05-21-phase-2-b2-stripe-single-shot.md` (full Plan-Doc 2026-05-21) | v0.2 Pricing-Pivot: Single-Shot €1/€3 Payment-Intent (NOT 3/10-Shot Checkout-Session) + Auth deferred to Phase 3 |
 | `2026-05-20-phase-2-b2-stripe-single-shot.md` | ❌ Superseded 2026-05-21 | `2026-05-21-phase-2-b2-stripe-single-shot.md` (full Plan-Doc) | Stub was slot-reservation only (2026-05-20 letter-e); full Plan-Doc written 2026-05-21 letter-b after Stripe-preconditions filled + advisor()-pre-call integrated 11 catches |
+| `phase-7-hardening.md` | ❌ Superseded 2026-05-24, archived | Phase-2-C (launch-blocker hardening) + Phase-3+ (ongoing hardening) | v0.2 Pricing-Pivot + Phase-2-C re-scope (Option B): launch-blocker items (Imprint/Privacy/Terms, GDPR delete-endpoint, rate-limits visible in MVP) fold into Phase-2-C Plan-Doc. Non-blocker hardening (monitoring expansion, audit-log polish) re-surfaces at Phase-3 + Phase-4+ Plan-Doc-time. Stub moved to `docs/archive/` for timeline-traceability per [Spec 2026-05-21 Decision-Needed Q6 default](../specs/2026-05-21-phase-2-c-scope-clarification.md). |
+| `phase-8-pilot.md` | ❌ Superseded 2026-05-24, archived | `Phase-2-C` (scope-defined 2026-05-24 per Option B) | v0.2 Pricing-Pivot + Phase-2-C re-scope (Option B): pilot-launch + 5-user-UAT + copy-revision + Lighthouse-tuning fold into Phase-2-C. Stub moved to `docs/archive/` for timeline-traceability per [Spec 2026-05-21 Decision-Needed Q6 default](../specs/2026-05-21-phase-2-c-scope-clarification.md). |
 
 ## How To Use
 
