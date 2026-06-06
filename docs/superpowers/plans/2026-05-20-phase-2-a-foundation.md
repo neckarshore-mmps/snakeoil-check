@@ -2,6 +2,8 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
+> **Post-execution note (2026-06-06):** This plan was implemented (PR #16, merged) with **six deliberate divergences from the spec** — see [Implementation Divergences](#implementation-divergences-post-execution-annotation--2026-06-06) at the end before treating any task body as 1:1 with the shipped code.
+
 **Goal:** Build the multi-model routing infrastructure, DB schema foundation, durable Vercel Workflow pipeline, and empirical benchmarks that all subsequent Phase-2 tiers (Revenue + Frontend) depend on.
 
 **Architecture:** Plugin-Signal Router-Layer (env-driven model-selection) sits between business-logic and AI-providers. Vercel AI Gateway is the only path in Phase-2 (BYOK Direct-Path is Phase-3+). Drizzle migrations add `checks` + `check_results` tables. Vercel Workflow orchestrates durable scrape→score→ai→persist pipeline. Two benchmarks validate model-strategy: Strategy-Benchmark (single-call vs per-criterion on Sonnet, Bob's existing §8 #1) + Cross-Model-Benchmark (Haiku vs Sonnet vs Gemini Flash, NEW Task 5b).
@@ -2185,3 +2187,20 @@ Ready for User-merge. After merge: proceed to Plan B (Revenue Path).
 Total: 15 Tasks. Estimated wall-clock: 6-10 hours of Bob-implementation-time (TDD discipline + commit cadence).
 
 **Plan complete and saved to `docs/superpowers/plans/2026-05-20-phase-2-a-foundation.md`.**
+
+---
+
+## Implementation Divergences (post-execution annotation — 2026-06-06)
+
+> **Note:** This plan was written before implementation. During execution (Bob, 2026-05-20-c, PR #16 merged), the actual implementation diverged from the spec in six specific places. Each divergence was a deliberate, correct adaptation to the real SDK/API surface — **actual implementation diverged — kept** — captured here so future Bob-Dispatch sessions reading this plan know the spec is not 1:1 with the shipped code. Rationale lives in the cited commit messages.
+
+| # | Spec said | Shipped instead | Where | Commit |
+|---|-----------|-----------------|-------|--------|
+| 1 | Vercel Workflow `workflow({name}, fn)` pattern | `'use workflow'` / `'use step'` directives + build-time `withWorkflow()` transform in `next.config.ts` (the actual published WDK API) | `next.config.ts`, `src/lib/workflow/` | `2471683` |
+| 2 | `scrapeStep` accepts `string` | `scrapeStep` accepts `NormalizedDoc`; `fetchHtml()` returns a `FetchResult` object — enables richer prompt-building downstream | `src/lib/workflow/steps/scrape.ts` | `ccd6b4e` |
+| 3 | DB schema split per-table under `src/db/schema/`; migrations in `src/db/migrations/` | Schema stays flat in `src/db/schema.ts`; migrations live in `./drizzle/` — preserves the existing Drizzle config | `src/db/schema.ts`, `drizzle/` | `38c95c4` |
+| 4 | Budget-tier derived from the routing decision | Budget-tier mapped from `input.tier` in `scoreStep` — an escalated-standard customer still runs on the 30K budget (intentional cost-control; SC5, resolved 2026-05-20-d at 30K-keep) | `src/lib/workflow/steps/score.ts` | `2471683` |
+| 5 | Free-shot tier flows through `decideTier()` | Free-shot bypasses `decideTier()` entirely and uses `ROUTER_FREESHOT_*` env config directly — free customers always get the free-shot model regardless of signals | `src/lib/router/index.ts:22-27` | `ef3dfa9` |
+| 6 | (implicit) directives work as-is | `withWorkflow()` in `next.config.ts` is **mandatory** for the directive transforms — without it `'use workflow'` is a no-op string literal in production (fine for Vitest, breaks durability) | `next.config.ts` | `2471683` |
+
+**Closes open_item `T-CARRY-PLAN-A-ANNOTATION-PASS`.**

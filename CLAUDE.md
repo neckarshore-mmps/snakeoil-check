@@ -48,6 +48,13 @@ The Claude Code harness resets `cwd` after every Bash call. Unscoped commands ri
 - Drizzle migrations versioned, never edit applied migrations
 - **AI calls:** always via Vercel AI Gateway (string `"anthropic/claude-sonnet-4.5"`), never via `@ai-sdk/anthropic` direct — keeps provider-switch capability
 
+## CI
+
+- CI (`.github/workflows/ci.yml`) triggers **only** on `pull_request.branches: [main]` and `push` to `main`. This is deliberate (single-base model) — it keeps CI from firing on every intermediate branch.
+- **Stacked-PR consequence:** a PR whose base is *another feature branch* (not `main`) will **not** run CI until that base merges to `main` and the child is rebased onto `main`. This is by design for the current solo-dev shape; do **not** broaden the trigger (e.g. to `pull_request:` with no branch filter) — that would run the full suite on every link of every stack.
+- **Cascade-on-merge expectation:** after a stacked PR's base merges to `main`, **rebase the child onto `main`** so its CI fires before you merge it. Don't merge a child whose CI never ran against `main`.
+- A future multi-author workflow may justify broader triggers; revisit then. Historical context: stacked PRs #10/#11/#12 (2026-05-20) didn't see CI until their bases caught up — acceptable for this shape (open_item `T-NEW-CI-TRIGGER-EXTEND-STACKED-PRS`).
+
 ## Definition of Done
 
 - Tests pass (Vitest unit + Playwright E2E for critical flows)
