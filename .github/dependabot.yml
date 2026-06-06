@@ -9,6 +9,17 @@ updates:
     versioning-strategy: increase-if-necessary
     labels:
       - dependencies
+    # AI SDK v4 -> v5 is a coordinated breaking migration: the @ai-sdk/* provider
+    # packages v3.x require `ai` v5 (they return LanguageModelV3, but ai@4
+    # generateObject expects LanguageModelV1). Bumping a provider major in
+    # isolation can never go green. Ignore AI-SDK major bumps until the v5
+    # migration is planned as one pass (ai + both providers + generateObject +
+    # tests). Minor/patch updates still flow. See open_item snakeoil AI-SDK-v5.
+    ignore:
+      - dependency-name: "@ai-sdk/*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "ai"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
