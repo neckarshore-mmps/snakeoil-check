@@ -1,5 +1,6 @@
 import {
   boolean,
+  index,
   integer,
   jsonb,
   pgEnum,
@@ -102,3 +103,91 @@ export const checkResults = pgTable('check_results', {
 
 export type CheckResult = typeof checkResults.$inferSelect;
 export type NewCheckResult = typeof checkResults.$inferInsert;
+
+// ── Enums (B1 Phase 1 — Free-Shot Funnel) ────────────────────────────────────
+
+export const emailVerificationStatusEnum = pgEnum('email_verification_status', [
+  'pending',
+  'confirmed',
+  'bounced',
+  'expired',
+]);
+
+export const rateLimitKeyTypeEnum = pgEnum('rate_limit_key_type', ['ip', 'email', 'url']);
+
+// ── Email Verifications (B1 Phase 1) ─────────────────────────────────────────
+// Token-based email-confirm + bounce-tracking. email_hash + token_hash are
+// hashed at rest (no plaintext PII here — plaintext lives only in users.emailPlain,
+// guarded by the GDPR delete-endpoint, phase-7-hardening #13).
+
+export const emailVerifications = pgTable(
+  'email_verifications',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    emailHash: text('email_hash').notNull(),
+    tokenHash: text('token_hash').notNull().unique(),
+    status: emailVerificationStatusEnum('status').notNull().default('pending'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    confirmedAt: timestamp('confirmed_at', { withTimezone: true }),
+    bouncedAt: timestamp('bounced_at', { withTimezone: true }),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+  },
+  (table) => [index('email_verifications_email_hash_idx').on(table.emailHash)],
+);
+
+export type EmailVerification = typeof emailVerifications.$inferSelect;
+export type NewEmailVerification = typeof emailVerifications.$inferInsert;
+
+// ── Email Subscribers (B1 Phase 1) ───────────────────────────────────────────
+// Resend-Audience list membership + GDPR opt-in flag. removed_at = soft-delete
+// (unsubscribe) so opt-out history survives for compliance.
+
+export const emailSubscribers = pgTable(
+  'email_subscribers',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    emailHash: text('email_hash').notNull(),
+    audienceTag: text('audience_tag').notNull(),
+    gdprMarketingOptIn: boolean('gdpr_marketing_opt_in').notNull().default(false),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    removedAt: timestamp('removed_at', { withTimezone: true }),
+  },
+  (table) => [index('email_subscribers_email_hash_idx').on(table.emailHash)],
+);
+
+export type EmailSubscriber = typeof emailSubscribers.$inferSelect;
+export type NewEmailSubscriber = typeof emailSubscribers.$inferInsert;
+
+// ── Rate Limits (B1 Phase 1) ─────────────────────────────────────────────────
+// Composite IP/Email/URL sliding-window storage for the anti-abuse pipeline.
+
+export const rateLimits = pgTable(
+  'rate_limits',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    keyHash: text('key_hash').notNull(),
+    keyType: rateLimitKeyTypeEnum('key_type').notNull(),
+    count: integer('count').notNull().default(0),
+    windowStart: timestamp('window_start', { withTimezone: true }).notNull(),
+  },
+  (table) => [index('rate_limits_key_hash_idx').on(table.keyHash)],
+);
+
+export type RateLimit = typeof rateLimits.$inferSelect;
+export type NewRateLimit = typeof rateLimits.$inferInsert;
+
+// ── Curated Examples (B1 Phase 1) ────────────────────────────────────────────
+// Tier-0 Examples Gallery data. url + slug unique (already indexed via unique).
+
+export const curatedExamples = pgTable('curated_examples', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  url: text('url').notNull().unique(),
+  slug: text('slug').notNull().unique(),
+  scoringResultJson: jsonb('scoring_result_json').notNull(),
+  curatorNote: text('curator_note'),
+  publishedAt: timestamp('published_at', { withTimezone: true }).notNull().defaultNow(),
+  lastRerunAt: timestamp('last_rerun_at', { withTimezone: true }),
+});
+
+export type CuratedExample = typeof curatedExamples.$inferSelect;
+export type NewCuratedExample = typeof curatedExamples.$inferInsert;
