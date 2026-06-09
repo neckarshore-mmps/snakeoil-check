@@ -15,6 +15,13 @@
       "when": 1779281437671,
       "tag": "0001_parallel_marvel_zombies",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1781006448534,
+      "tag": "0002_tan_purple_man",
+      "breakpoints": true
     }
   ]
 }
