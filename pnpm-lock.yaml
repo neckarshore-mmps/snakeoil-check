@@ -26,6 +26,9 @@ importers:
       cheerio:
         specifier: 1.2.0
         version: 1.2.0
+      disposable-email-domains:
+        specifier: 1.0.62
+        version: 1.0.62
       dotenv:
         specifier: 17.4.2
         version: 17.4.2
@@ -2216,6 +2219,9 @@ packages:
 
   diff-match-patch@1.0.5:
     resolution: {integrity: sha512-IayShXAgj/QMXgB0IWmKx+rOPuGMhqm5w6jvFxmVenXKIzRqTAAsbBPT3kWQeGANj3jGgvcvv4yK6SxqYmikgw==}
+
+  disposable-email-domains@1.0.62:
+    resolution: {integrity: sha512-LBQvhRw7mznQTPoyZbsmYeNOZt1pN5aCsx4BAU/3siVFuiM9f2oyKzUaB8v1jbxFjE3aYqYiMo63kAL4pHgfWQ==}
 
   dom-serializer@2.0.0:
     resolution: {integrity: sha512-wIkAryiqt/nV5EQKqQpo3SToSOV9J0DnbJqwK7Wv/Trc92zIAYZ4FlMu+JPFW1DfGFt81ZTCGgDEabffXeLyJg==}
@@ -5821,6 +5827,8 @@ snapshots:
   devalue@5.6.3: {}
 
   diff-match-patch@1.0.5: {}
+
+  disposable-email-domains@1.0.62: {}
 
   dom-serializer@2.0.0:
     dependencies:
