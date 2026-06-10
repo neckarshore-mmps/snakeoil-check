@@ -2,7 +2,12 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    # bob/fable-pilot-p3p1: TEMPORARY pilot-only addition. The pilot PR #45 is
+    # structurally CONFLICTING vs main (base fcbb9c1 predates merged #44, same
+    # paths), so GitHub builds no merge ref and pull_request runs never fire.
+    # push-event runs use this branch's workflow file — branch is deleted
+    # after the pilot, never merged.
+    branches: [main, bob/fable-pilot-p3p1]
   pull_request:
     branches: [main]
 
@@ -32,6 +37,8 @@ jobs:
         run: pnpm typecheck
       - name: Unit tests
         run: pnpm test
+      - name: Disposable-blocklist freshness (warning-only)
+        run: pnpm validate:disposable-list
       - name: Build
         run: pnpm build
 
