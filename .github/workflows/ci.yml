@@ -32,8 +32,6 @@ jobs:
         run: pnpm typecheck
       - name: Unit tests
         run: pnpm test
-      - name: Disposable-blocklist freshness (warning-only)
-        run: pnpm validate:disposable-list
       - name: Build
         run: pnpm build
 
