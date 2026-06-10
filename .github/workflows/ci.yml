@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, bob/opus-pilot-p3p1] # TEMP pilot CI-capture trigger — DO NOT MERGE
   pull_request:
     branches: [main]
 
