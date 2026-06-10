@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { MxRecord } from '../mx-lookup';
 import { validateEmail } from '../email-validator';
+import type { MxRecord } from '../mx-lookup';
 
 // Email-Verify composition — Layer 1 (disposable) + Layer 2 (MX) run
 // synchronously at submit; Layers 3+4 (IP rate-limit, bounce) happen at later
@@ -39,9 +39,11 @@ describe('validateEmail (Layer 1+2 composition)', () => {
   });
 
   it('blocks a typo domain without MX records at layer 2', async () => {
-    await expect(
-      validateEmail('user@gmial.com', { resolver: notFoundResolver }),
-    ).resolves.toEqual({ valid: false, layer: 2, reason: 'no_mx' });
+    await expect(validateEmail('user@gmial.com', { resolver: notFoundResolver })).resolves.toEqual({
+      valid: false,
+      layer: 2,
+      reason: 'no_mx',
+    });
   });
 
   it('passes a legitimate address once layers 1+2 clear (3+4 deferred)', async () => {
