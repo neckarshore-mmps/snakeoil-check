@@ -30,6 +30,10 @@ jobs:
         run: pnpm lint
       - name: Typecheck
         run: pnpm typecheck
+      - name: Disposable-list freshness
+        # Warns (exit 0) on >30d staleness or package/count drift; hard-fails
+        # only on a missing/corrupt meta snapshot (import throws).
+        run: pnpm validate:disposable-list
       - name: Unit tests
         run: pnpm test
       - name: Build
