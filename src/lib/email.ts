@@ -1,4 +1,4 @@
-import { createHash } from 'node:crypto';
+import { pseudonymizeHash } from './pseudonymize';
 
 export function normalizeEmail(input: string): string {
   const trimmed = input.trim().toLowerCase();
@@ -8,6 +8,11 @@ export function normalizeEmail(input: string): string {
   return trimmed;
 }
 
+/**
+ * Keyed (HMAC-SHA256, HASH_SECRET) digest of a normalized email. The digest
+ * is PSEUDONYMOUS personal data (GDPR F-NOW-1) — keying prevents membership
+ * confirmation by hashing a candidate address, but it is NOT anonymization.
+ */
 export function hashEmail(normalizedEmail: string): string {
-  return createHash('sha256').update(normalizedEmail).digest('hex');
+  return pseudonymizeHash(normalizedEmail);
 }

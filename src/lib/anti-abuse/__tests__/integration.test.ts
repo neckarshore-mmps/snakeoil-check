@@ -1,4 +1,5 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { createHash } from 'node:crypto';
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { type AntiAbuseDeps, hashIp, runAntiAbusePipeline } from '../index';
 import { freeShotDailyKey } from '../kill-switch';
 import { rateLimitKey } from '../rate-limit';
@@ -14,10 +15,25 @@ const NOW = new Date('2026-06-09T12:00:00.000Z');
 const IP = '203.0.113.7';
 const URL = 'https://example.com/offer';
 
+// hashIp + rateLimitKey are keyed by HASH_SECRET (GDPR F-NOW-1) — provide it.
+beforeAll(() => {
+  vi.stubEnv('HASH_SECRET', 'test-hash-secret');
+});
+afterAll(() => {
+  vi.unstubAllEnvs();
+});
+
 const okTurnstile = async (): Promise<TurnstileVerifyResult> => ({ success: true });
 const failTurnstile = async (): Promise<TurnstileVerifyResult> => ({
   success: false,
   errorCodes: ['timeout-or-duplicate'],
+});
+
+describe('hashIp (GDPR F-NOW-1)', () => {
+  it('is keyed (HMAC) — NOT the plain unsalted SHA-256 of the IP', () => {
+    const plainSha256 = createHash('sha256').update(IP).digest('hex');
+    expect(hashIp(IP)).not.toBe(plainSha256);
+  });
 });
 
 describe('runAntiAbusePipeline (Task 2.6 integration)', () => {

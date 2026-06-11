@@ -12,7 +12,7 @@
 // of a full Redis outage: 503 maintenance (the cost guard wins). Posture is a
 // security decision — see the session report for James.
 
-import { createHash } from 'node:crypto';
+import { pseudonymizeHash } from '../pseudonymize';
 import { peekKillSwitch } from './kill-switch';
 import { checkRateLimit, FREE_SHOT_RATE_LIMIT, rateLimitKey } from './rate-limit';
 import { getRedis, type RedisLike } from './redis';
@@ -53,9 +53,13 @@ export type AntiAbuseOutcome =
       retryAfterSeconds?: number;
     };
 
-/** SHA-256 an IP for use as a non-PII cache/bucket component. */
+/**
+ * HMAC-SHA256 (HASH_SECRET-keyed) an IP for use as a cache/bucket component.
+ * The digest is PSEUDONYMOUS personal data (GDPR F-NOW-1) — keyed so a
+ * candidate IP cannot be confirmed by re-hashing, but NOT anonymous.
+ */
 export function hashIp(ip: string): string {
-  return createHash('sha256').update(ip).digest('hex');
+  return pseudonymizeHash(ip);
 }
 
 /**

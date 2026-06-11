@@ -5,7 +5,7 @@
 // kill-switch (Layer 4) is the fail-CLOSED cost-guard, not this layer.
 // (Posture is a security decision — see report for James.)
 
-import { createHash } from 'node:crypto';
+import { pseudonymizeHash } from '../pseudonymize';
 import type { RedisLike } from './redis';
 
 /** Free-Shot default: max 3 signups per 24h per identity (IP / cookie). */
@@ -33,11 +33,12 @@ export interface RateLimitResult {
 
 /**
  * Build a namespaced, hashed rate-limit key. The raw value (e.g. an IP) is
- * SHA-256'd so no PII lands in Redis — GDPR data-minimisation.
+ * HMAC-SHA256'd with HASH_SECRET (GDPR F-NOW-1), so only a keyed,
+ * PSEUDONYMOUS digest lands in Redis. This is pseudonymization
+ * (data-minimisation), NOT anonymization — the digest remains personal data.
  */
 export function rateLimitKey(kind: string, value: string): string {
-  const hash = createHash('sha256').update(value).digest('hex');
-  return `freeshot:rl:${kind}:${hash}`;
+  return `freeshot:rl:${kind}:${pseudonymizeHash(value)}`;
 }
 
 /**
