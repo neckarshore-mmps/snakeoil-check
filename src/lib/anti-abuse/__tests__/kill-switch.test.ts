@@ -89,6 +89,17 @@ describe('peekKillSwitch (read-only gate)', () => {
     expect(r.blocked).toBe(true);
     expect(r.reason).toBe('maintenance');
   });
+
+  it('fails CLOSED (maintenance) when the daily counter is corrupt — NaN must not bypass the cost guard', async () => {
+    // James B1-P2 finding (kill-switch.ts:87): a non-numeric value under the
+    // daily key (manual SET, key collision) coerces to NaN, and `NaN >= limit`
+    // is false → the cost guard would silently open for the key's TTL (up to
+    // 25h). Corruption must block, not bypass.
+    await store.set(DAILY_KEY, 'garbage');
+    const r = await peekKillSwitch(store, { enabled: true, dailyLimit: 50, now: NOW });
+    expect(r.blocked).toBe(true);
+    expect(r.reason).toBe('maintenance');
+  });
 });
 
 describe('consumeQuota (Phase-5 Workflow-trigger seam)', () => {
