@@ -4,16 +4,16 @@
 
 - **Project:** Snake-Oil-or-Gold Check — MMP for AI-powered online-offer review service
 - **GitHub home:** `neckarshore-ai/snakeoil-check`
-- **Local path:** `~/Developer/projects/neckarshore-ai/snakeoil-check/`
+- **Local path:** `~/Developer/projects/neckarshore-mmps/snakeoil-check/`
 - **Domain (TBD):** `snakeoilcheck.com` or similar (decided before Stripe Checkout integration, v0.1 build phase 4)
 - **Brand:** Neckarshore.ai portfolio Mini-Geldmaschine. Marketing tone: skeptical, dry, honest — Western/RDR2 aesthetic per marketing brief.
 
 ## Working Directory Rule
 
-This repo lives at `~/Developer/projects/neckarshore-ai/snakeoil-check/`. Every Bash command must start with:
+This repo lives at `~/Developer/projects/neckarshore-mmps/snakeoil-check/`. Every Bash command must start with:
 
 ```bash
-cd ~/Developer/projects/neckarshore-ai/snakeoil-check && ...
+cd ~/Developer/projects/neckarshore-mmps/snakeoil-check && ...
 ```
 
 The Claude Code harness resets `cwd` after every Bash call. Unscoped commands risk writing to the wrong repo.
