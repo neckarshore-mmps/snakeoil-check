@@ -22,6 +22,13 @@
       "when": 1781006448534,
       "tag": "0002_tan_purple_man",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1781208134411,
+      "tag": "0003_wandering_vertigo",
+      "breakpoints": true
     }
   ]
 }

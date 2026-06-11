@@ -1,12 +1,12 @@
 import { getTableColumns } from 'drizzle-orm';
 import { describe, expect, it } from 'vitest';
+import * as schemaExports from '../schema';
 import {
   checkResults,
   checks,
   curatedExamples,
   emailSubscribers,
   emailVerifications,
-  rateLimits,
   users,
 } from '../schema';
 
@@ -157,27 +157,13 @@ describe('email_subscribers table schema (B1 Phase 1)', () => {
   });
 });
 
-describe('rate_limits table schema (B1 Phase 1)', () => {
-  it('exposes the expected columns', () => {
-    const columns = getTableColumns(rateLimits);
-    expect(Object.keys(columns).sort()).toEqual([
-      'count',
-      'id',
-      'keyHash',
-      'keyType',
-      'windowStart',
-    ]);
-  });
-
-  it('marks id as primary key', () => {
-    expect(getTableColumns(rateLimits).id.primary).toBe(true);
-  });
-
-  it('requires keyHash, count and windowStart', () => {
-    const columns = getTableColumns(rateLimits);
-    expect(columns.keyHash.notNull).toBe(true);
-    expect(columns.count.notNull).toBe(true);
-    expect(columns.windowStart.notNull).toBe(true);
+describe('rate_limits removal (GDPR F-NOW-3, Dr. Sommer baseline)', () => {
+  // Task 1.3 built the table; Task 2.2 chose Upstash Redis — the table never
+  // had a writer. A ROPA author reading the schema would wrongly list Neon as
+  // the rate-limit store. Dead surface removed; ROPA must name Upstash.
+  it('does not expose a rate_limits table — rate-limit state lives in Upstash Redis', () => {
+    expect('rateLimits' in schemaExports).toBe(false);
+    expect('rateLimitKeyTypeEnum' in schemaExports).toBe(false);
   });
 });
 

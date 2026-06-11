@@ -113,8 +113,6 @@ export const emailVerificationStatusEnum = pgEnum('email_verification_status', [
   'expired',
 ]);
 
-export const rateLimitKeyTypeEnum = pgEnum('rate_limit_key_type', ['ip', 'email', 'url']);
-
 // ── Email Verifications (B1 Phase 1) ─────────────────────────────────────────
 // Token-based email-confirm + bounce-tracking. email_hash + token_hash are
 // hashed at rest (no plaintext PII here — plaintext lives only in users.emailPlain,
@@ -158,23 +156,9 @@ export const emailSubscribers = pgTable(
 export type EmailSubscriber = typeof emailSubscribers.$inferSelect;
 export type NewEmailSubscriber = typeof emailSubscribers.$inferInsert;
 
-// ── Rate Limits (B1 Phase 1) ─────────────────────────────────────────────────
-// Composite IP/Email/URL sliding-window storage for the anti-abuse pipeline.
-
-export const rateLimits = pgTable(
-  'rate_limits',
-  {
-    id: uuid('id').primaryKey().defaultRandom(),
-    keyHash: text('key_hash').notNull(),
-    keyType: rateLimitKeyTypeEnum('key_type').notNull(),
-    count: integer('count').notNull().default(0),
-    windowStart: timestamp('window_start', { withTimezone: true }).notNull(),
-  },
-  (table) => [index('rate_limits_key_hash_idx').on(table.keyHash)],
-);
-
-export type RateLimit = typeof rateLimits.$inferSelect;
-export type NewRateLimit = typeof rateLimits.$inferInsert;
+// NOTE (GDPR F-NOW-3, Dr. Sommer baseline): the former rate_limits table
+// (Task 1.3) was DROPPED in migration 0003 — it never had a writer; rate-limit
+// state lives in Upstash Redis (Task 2.2). ROPA must name Upstash, not Neon.
 
 // ── Curated Examples (B1 Phase 1) ────────────────────────────────────────────
 // Tier-0 Examples Gallery data. url + slug unique (already indexed via unique).
