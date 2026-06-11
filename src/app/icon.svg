@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Placeholder favicon (Bob, 2026-06-11). Linus replaces this with the
+       real Western/RDR2 brand asset in the Phase-5 frontend pass. -->
+  <rect width="64" height="64" rx="12" fill="#1c1917"/>
+  <text x="32" y="46" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif"
+        font-size="40" font-weight="bold" fill="#d4a843">S</text>
+</svg>
