@@ -85,6 +85,10 @@ export async function peekKillSwitch(
   try {
     const raw = await store.get<number | string>(freeShotDailyKey(now));
     const count = raw == null ? 0 : Number(raw);
+    // Corrupt counter (manual SET / key collision) coerces to NaN, and
+    // `NaN >= limit` is false — that would BYPASS the cost guard for the
+    // key's TTL. Throw into the catch below → fail CLOSED (James B1-P2).
+    if (!Number.isFinite(count)) throw new Error('corrupt daily counter');
 
     if (count >= limit) {
       return {
