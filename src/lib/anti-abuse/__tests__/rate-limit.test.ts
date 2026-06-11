@@ -1,6 +1,15 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { createHash } from 'node:crypto';
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { checkRateLimit, FREE_SHOT_RATE_LIMIT, rateLimitKey } from '../rate-limit';
 import { FakeRedis } from './fake-redis';
+
+// rateLimitKey is keyed by HASH_SECRET (GDPR F-NOW-1) — provide it for the suite.
+beforeAll(() => {
+  vi.stubEnv('HASH_SECRET', 'test-hash-secret');
+});
+afterAll(() => {
+  vi.unstubAllEnvs();
+});
 
 // Anti-Abuse Layer 2 — IP+Cookie rate-limit, Upstash-backed.
 // Exercised against the in-memory FakeRedis (inject-store) so these assertions
@@ -19,6 +28,12 @@ describe('rateLimitKey', () => {
     expect(rateLimitKey('ip', ip)).toBe(key);
     // distinct kinds for the same raw value never collide
     expect(rateLimitKey('cookie', ip)).not.toBe(key);
+  });
+
+  it('hashes are keyed (HMAC) — NOT the plain unsalted SHA-256 of the value (GDPR F-NOW-1)', () => {
+    const ip = '203.0.113.7';
+    const plainSha256 = createHash('sha256').update(ip).digest('hex');
+    expect(rateLimitKey('ip', ip)).not.toContain(plainSha256);
   });
 });
 

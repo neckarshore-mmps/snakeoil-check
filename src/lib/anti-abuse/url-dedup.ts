@@ -33,8 +33,10 @@ export function normalizeUrl(raw: string): string {
 }
 
 /**
- * Build a per-IP, hashed dedup key. The normalised URL is SHA-256'd (no PII /
- * target URL stored in clear), and namespaced by the caller's IP-hash bucket.
+ * Build a per-IP, hashed dedup key. The normalised URL is SHA-256'd (content
+ * addressing — the URL is not an identity value), and namespaced by the
+ * caller's IP-hash bucket. The ipHash component is the KEYED pseudonymous
+ * digest from hashIp (GDPR F-NOW-1) — pseudonymous personal data, not "no PII".
  */
 export function urlDedupKey(input: { url: string; ipHash: string }): string {
   const hash = createHash('sha256').update(normalizeUrl(input.url)).digest('hex');
