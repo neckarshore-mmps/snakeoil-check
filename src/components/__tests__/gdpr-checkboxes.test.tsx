@@ -17,12 +17,13 @@ describe('GdprCheckboxes component', () => {
   it('should enforce transactional consent as required', () => {
     const html = ReactDOMServer.renderToString(<GdprCheckboxes />);
     
-    // The transactional checkbox must have the required attribute
-    // Note: React renders required as 'required=""' or just 'required' in HTML
-    expect(html).toMatch(/name="consent_transactional"[^>]*required/);
+    // Find the input element for transactional consent and verify it has the required attribute
+    const transactionalInput = html.match(/<input[^>]*name="consent_transactional"[^>]*>/)?.[0] || '';
+    expect(transactionalInput).toContain('required');
     
-    // The marketing checkbox must not be required
-    expect(html).not.toMatch(/name="consent_marketing"[^>]*required/);
+    // Find the input element for marketing consent and verify it does NOT have the required attribute
+    const marketingInput = html.match(/<input[^>]*name="consent_marketing"[^>]*>/)?.[0] || '';
+    expect(marketingInput).not.toContain('required');
   });
 
   it('should render correct German GDPR label texts', () => {
