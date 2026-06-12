@@ -11,6 +11,14 @@ import type { RedisLike } from './redis';
 /** Free-Shot default: max 3 signups per 24h per identity (IP / cookie). */
 export const FREE_SHOT_RATE_LIMIT = { limit: 3, windowSeconds: 86_400 } as const;
 
+/**
+ * Confirm-endpoint budget: max 10 confirm attempts per hour per IP (James
+ * B1-P3 part-2 F1). Deliberately looser than FREE_SHOT_RATE_LIMIT — a confirm
+ * link gets double-clicked and corporate NATs share IPs; this gate only stops
+ * volumetric DB saturation, not signup abuse (token entropy handles forgery).
+ */
+export const CONFIRM_RATE_LIMIT = { limit: 10, windowSeconds: 3_600 } as const;
+
 export interface RateLimitOptions {
   /** Max allowed hits within the window before blocking. */
   limit: number;

@@ -23,6 +23,9 @@ export async function POST(req: Request): Promise<Response> {
     return Response.json({ ok: false, error: 'missing fields' }, { status: 400 });
   }
 
+  // Trust assumption (James F3): on Vercel, x-forwarded-for is set by the
+  // platform and the first entry is the real client IP — spoof-resistant
+  // HERE, but NOT portable to other hosts where clients can inject the header.
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || '0.0.0.0';
 
   // 1. Anti-abuse gate: turnstile → rate-limit → url-dedup → kill-switch.
