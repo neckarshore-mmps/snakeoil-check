@@ -40,7 +40,7 @@
     "react-dom": "19.2.7",
     "resend": "6.12.4",
     "svix": "1.95.2",
-    "workflow": "4.2.5",
+    "workflow": "4.4.0",
     "zod": "4.4.3"
   },
   "devDependencies": {
