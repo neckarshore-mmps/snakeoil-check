@@ -278,41 +278,41 @@ Phase 0 is a hard-gate. If ANY check fails, Bob stops and surfaces to MASCHIN/Us
 
 ### Task 2.1 — Cloudflare Turnstile Server-Side Verify (Layer 1)
 
-- [ ] Failing-test FIRST: `turnstile.test.ts` — given a Turnstile token, POSTs to `siteverify` endpoint with `$TURNSTILE_SECRET_KEY`, returns `success: boolean` + `cdata`
-- [ ] Mock fetch with vi.mock + happy-path response
-- [ ] Mock error-path (expired token, invalid response)
-- [ ] Implementation `src/lib/anti-abuse/turnstile.ts`
-- [ ] GREEN + commit pair
+- [x] Failing-test FIRST: `turnstile.test.ts` — given a Turnstile token, POSTs to `siteverify` endpoint with `$TURNSTILE_SECRET_KEY`, returns `success: boolean` + `cdata`
+- [x] Mock fetch with vi.mock + happy-path response
+- [x] Mock error-path (expired token, invalid response)
+- [x] Implementation `src/lib/anti-abuse/turnstile.ts`
+- [x] GREEN + commit pair
 
 ### Task 2.2 — IP+Cookie Rate-Limit (Layer 2, Upstash-Redis-backed)
 
-- [ ] Failing-test FIRST: `rate-limit.test.ts` — incrementCounter(`ip:<hash>:24h`) increments + reads correctly via Upstash-Redis mock
-- [ ] Test: at 4th call within 24h window returns `blocked: true` (max 3 email-signups / 24h per IP-hash)
-- [ ] Test: TTL behavior — counter resets after 24h
-- [ ] Implementation `src/lib/anti-abuse/rate-limit.ts`
-- [ ] GREEN + commit pair
+- [x] Failing-test FIRST: `rate-limit.test.ts` — incrementCounter(`ip:<hash>:24h`) increments + reads correctly via Upstash-Redis mock
+- [x] Test: at 4th call within 24h window returns `blocked: true` (max 3 email-signups / 24h per IP-hash)
+- [x] Test: TTL behavior — counter resets after 24h
+- [x] Implementation `src/lib/anti-abuse/rate-limit.ts`
+- [x] GREEN + commit pair
 
 ### Task 2.3 — URL-Dedup 5min Cache (Layer 5 per Design-Doc § 7.5)
 
-- [ ] Failing-test FIRST: `url-dedup.test.ts` — same URL submitted twice within 5min returns cached result (no new Workflow trigger)
-- [ ] Test: After 5min window expires, new submission triggers fresh Workflow
-- [ ] Test: URL normalization (trailing-slash, fragment-strip) before cache-key
-- [ ] Implementation `src/lib/anti-abuse/url-dedup.ts`
-- [ ] GREEN + commit pair
+- [x] Failing-test FIRST: `url-dedup.test.ts` — same URL submitted twice within 5min returns cached result (no new Workflow trigger)
+- [x] Test: After 5min window expires, new submission triggers fresh Workflow
+- [x] Test: URL normalization (trailing-slash, fragment-strip) before cache-key
+- [x] Implementation `src/lib/anti-abuse/url-dedup.ts`
+- [x] GREEN + commit pair
 
 ### Task 2.4 — Kill-Switch with Free-Tier-Quota-Guard (Layer 6 + NEW Layer 7)
 
 > **Per advisor() catch #4 (2026-05-20-e):** Gemini Flash free-tier IS rate-limited (empirical 429 quota-exhausted observed during smoke-test). Plan-doc MUST specify `max N Free-Shots / day system-wide before Kill-Switch auto-flips`.
 
-- [ ] Failing-test FIRST: `kill-switch.test.ts`:
+- [x] Failing-test FIRST: `kill-switch.test.ts`:
   - `FREE_SHOT_ENABLED=false` → returns `blocked: true, reason: 'maintenance'`
   - `FREE_SHOT_ENABLED=true` + daily-count < N → returns `blocked: false`
   - `FREE_SHOT_ENABLED=true` + daily-count >= N → returns `blocked: true, reason: 'daily_quota_exhausted'` + auto-disables Kill-Switch for current calendar-day
-- [ ] Test: redis-backed counter `freeshot:daily:YYYY-MM-DD` increments idempotently
-- [ ] Test: blocked-response triggers redirect-to-`/maintenance` (return-code decision: 503 with retry-after-midnight)
-- [ ] Implementation `src/lib/anti-abuse/kill-switch.ts`
-- [ ] **N = 50 default** (Phase-2 MVP conservative — adjustable per env-var `FREE_SHOT_DAILY_SYSTEM_LIMIT=50`)
-- [ ] GREEN + commit pair
+- [x] Test: redis-backed counter `freeshot:daily:YYYY-MM-DD` increments idempotently
+- [x] Test: blocked-response triggers redirect-to-`/maintenance` (return-code decision: 503 with retry-after-midnight)
+- [x] Implementation `src/lib/anti-abuse/kill-switch.ts`
+- [x] **N = 50 default** (Phase-2 MVP conservative — adjustable per env-var `FREE_SHOT_DAILY_SYSTEM_LIMIT=50`)
+- [x] GREEN + commit pair
 
 ### Task 2.5 — GDPR Double-Opt-In Component + Legal-Text
 
@@ -331,11 +331,11 @@ Phase 0 is a hard-gate. If ANY check fails, Bob stops and surfaces to MASCHIN/Us
 
 ### Task 2.6 — Anti-Abuse Pipeline Integration
 
-- [ ] Integration-test FIRST `integration.test.ts`: full pipeline for a single Free-Shot submission:
+- [x] Integration-test FIRST `integration.test.ts`: full pipeline for a single Free-Shot submission:
   - turnstile.verify() → rate-limit.check() → url-dedup.check() → kill-switch.check() → all-pass
   - Any failure short-circuits + returns specific error-code (400/403/429/503)
-- [ ] Implementation: middleware-style composition in `src/lib/anti-abuse/index.ts`
-- [ ] GREEN + commit pair
+- [x] Implementation: middleware-style composition in `src/lib/anti-abuse/index.ts`
+- [x] GREEN + commit pair
 
 **Phase 2 DoD:** All 4 MVP Anti-Abuse layers + Kill-Switch + GDPR checkbox-component pass tests + GDPR-text legally reviewed (User-action). Integration-test covers happy-path + each error-path.
 
@@ -345,64 +345,72 @@ Phase 0 is a hard-gate. If ANY check fails, Bob stops and surfaces to MASCHIN/Us
 
 ### Task 3.1 — Disposable-Email Detection (Layer 1)
 
-- [ ] Failing-test FIRST: `disposable-detect.test.ts`:
+- [x] Failing-test FIRST: `disposable-detect.test.ts`:
   - `isDisposable('mailinator.com')` returns true
   - `isDisposable('gmail.com')` returns false
   - Performance: <1ms per check (bundled blocklist, no I/O)
-- [ ] Install `disposable-email-domains` npm package, bundle as build-time JSON
-- [ ] Implementation `src/lib/email/disposable-detect.ts`
-- [ ] Add CI-check `scripts/validate-disposable-list.ts` warning if blocklist >30 days stale
-- [ ] GREEN + commit pair
+- [x] Install `disposable-email-domains` npm package, bundle as build-time JSON
+- [x] Implementation `src/lib/email/disposable-detect.ts`
+- [x] Add CI-check `scripts/validate-disposable-list.ts` warning if blocklist >30 days stale
+- [x] GREEN + commit pair
 
 ### Task 3.2 — MX-Lookup (Layer 2)
 
-- [ ] Failing-test FIRST: `mx-lookup.test.ts`:
+- [x] Failing-test FIRST: `mx-lookup.test.ts`:
   - `hasValidMx('gmail.com')` returns true (real DNS call in integration-tier, mocked in unit-tier)
   - `hasValidMx('gmial.com')` returns false (typo, no MX record)
   - Timeout: 2s max per lookup; on timeout returns `{ valid: false, reason: 'timeout' }`
-- [ ] Implementation `src/lib/email/mx-lookup.ts` (Node built-in `dns/promises`)
-- [ ] GREEN + commit pair
+- [x] Implementation `src/lib/email/mx-lookup.ts` (Node built-in `dns/promises`)
+- [x] GREEN + commit pair
 
 ### Task 3.3 — Token-Flow (generate + hash + verify)
 
-- [ ] Failing-test FIRST: `token.test.ts`:
+- [x] Failing-test FIRST: `token.test.ts`:
   - `generateToken()` returns 32-byte url-safe base64 + `tokenHash = sha256(token)`
   - `verifyToken(token, storedHash)` returns true on match, false on mismatch
   - Token expires after 30min (TTL stored in `email_verifications.expires_at`)
   - Token is single-use (status flips `pending → confirmed` on first verify)
-- [ ] Implementation `src/lib/email/token.ts`
-- [ ] GREEN + commit pair
+- [x] Implementation `src/lib/email/token.ts`
+- [x] GREEN + commit pair
 
 ### Task 3.4 — Email-Validator Composition (Layer 1+2 synchronous, 3+4 deferred)
 
-- [ ] Failing-test FIRST: `email-validator.test.ts`:
+- [x] Failing-test FIRST: `email-validator.test.ts`:
   - `validateEmail('user@mailinator.com')` returns `{ valid: false, layer: 1, reason: 'disposable' }`
   - `validateEmail('user@gmial.com')` returns `{ valid: false, layer: 2, reason: 'no_mx' }`
   - `validateEmail('user@gmail.com')` returns `{ valid: true }` (layers 1+2 pass; 3+4 happen at later signal)
-- [ ] Implementation `src/lib/email/email-validator.ts`
-- [ ] GREEN + commit pair
+- [x] Implementation `src/lib/email/email-validator.ts`
+- [x] GREEN + commit pair
 
 ### Task 3.5 — Resend Bounce-Webhook Handler (Layer 4)
 
-- [ ] Failing-test FIRST: `bounce-handler.test.ts`:
+- [x] Failing-test FIRST: `bounce-handler.test.ts`:
   - Verifies Resend webhook signature against `$RESEND_WEBHOOK_SECRET`
   - On `email.bounce` (hard) event: updates `email_verifications.status = 'bounced'` + `bounced_at = now()` + blocks future Free-Shots from that email-hash
   - On `email.complaint`: same as bounce-hard
   - Invalid signature: returns 401
-- [ ] Implementation `src/lib/email/bounce-handler.ts` + API-route `/api/resend/bounce-webhook`
-- [ ] GREEN + commit pair
+- [x] Implementation `src/lib/email/bounce-handler.ts` + API-route `/api/resend/bounce-webhook`
+- [x] GREEN + commit pair
 
 ### Task 3.6 — Send Confirm-Email (Resend template + Layer 3 IP-Rate-Limit)
 
-- [ ] Failing-test FIRST: integration-test for full email-send flow:
+- [x] Failing-test FIRST: integration-test for full email-send flow:
   - Layer 3: IP-Rate-Limit check (max 3 email-signups / 24h per IP-hash, reuses Task 2.2 rate-limit primitive)
   - Generate token (Task 3.3) + insert `email_verifications` row (status=pending)
   - Send via Resend with confirm-link `https://snakeoil.example.com/api/free-shot/confirm?token=<token>`
   - Track Resend message-id for bounce-correlation
-- [ ] Implementation embedded in `/api/free-shot/submit` route
-- [ ] GREEN + commit pair
+- [x] Implementation embedded in `/api/free-shot/submit` route
+- [x] GREEN + commit pair
 
 **Phase 3 DoD:** All 4 Email-Verify layers pass tests + Resend webhook tested with real Resend-CLI replay + integration-test covers full submit → email-send → confirm-click flow.
+
+> **Note (checkbox-tick pass, 2026-06-12 — PLAN-DOC-CHECKBOX-TICK):** Phases 2+3 ticked against merged
+> reality: 2.1 (#42), 2.2/2.3/2.4/2.6 (#43), 3.1–3.4 (#44), 3.5/3.6 (#53). Divergences vs spec text:
+> (a) Task 2.5 (GDPR checkbox component) deliberately NOT ticked — frontend component is Linus-scope,
+> unbuilt as of this pass; (b) Task 2.4 blocked-response returns a plain 503 (no `/maintenance` redirect —
+> page does not exist yet, Phase-5 concern); (c) the Phase-1 `rate_limits` table was built (#43-era) but
+> later DROPPED (#56, GDPR F-NOW-3) — rate-limit state lives in Upstash Redis, not Neon; (d) the
+> "real Resend-CLI replay" leg of the Phase-3 DoD is still open (tracked with the Phase-5 launch runbook).
 
 ---
 
